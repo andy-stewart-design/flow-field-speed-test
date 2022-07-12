@@ -2,17 +2,30 @@
 	import { onMount } from 'svelte';
 	import SimplexNoise from 'simplex-noise';
 	import { PI, cream, fog, green, colors, createGrid, Circle } from '$lib/utils/canvas';
+	import smplx from '$lib/data/smplx.json';
 
-	let canvas, columns, container, ctx, cR, field, rows, scale, simplex, size, wX, wY;
+	let animationFrame,
+		canvas,
+		columns,
+		container,
+		ctx,
+		cR,
+		field,
+		rows,
+		scale,
+		simplex,
+		size,
+		wX,
+		wY;
 	let time = 0;
 	const inc = 0.003;
 	let circles = [];
 
 	function setup() {
-		scale = window.devicePixelRatio;
+		scale = 1;
 		wX = container.offsetWidth;
 		wY = container.offsetHeight;
-		size = wX < 600 ? 16 : 20;
+		size = wX < 600 ? 20 : 24;
 		canvas.style.width = wX + 'px';
 		canvas.style.height = wY + 'px';
 		canvas.width = wX * scale;
@@ -25,7 +38,7 @@
 	}
 
 	function draw() {
-		window.requestAnimationFrame(draw);
+		animationFrame = window.requestAnimationFrame(draw);
 		calculateField();
 		clear();
 		drawField();
@@ -74,6 +87,7 @@
 		for (let x = 0; x < columns; x++) {
 			for (let y = 0; y < rows; y++) {
 				const angle = simplex.noise3D(x / 50, y / 50, time) * (PI * 2);
+				console.log(angle);
 				const length = simplex.noise3D(x / 100 + 40000, y / 100 + 40000, time);
 				field[x][y][0] = angle;
 				field[x][y][1] = length;
@@ -97,11 +111,14 @@
 	}
 
 	onMount(() => {
-		simplex = new SimplexNoise();
+		simplex = new SimplexNoise(100, 100, 100);
+
 		ctx = canvas.getContext('2d');
 		setup();
 		createCircles();
-		draw();
+		animationFrame = window.requestAnimationFrame(draw);
+
+		return () => window.cancelAnimationFrame(animationFrame);
 	});
 </script>
 
