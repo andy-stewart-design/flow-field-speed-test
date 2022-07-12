@@ -111,12 +111,14 @@
 	}
 
 	onMount(() => {
-		simplex = new SimplexNoise(100, 100, 100);
+		setTimeout(() => {
+			simplex = new SimplexNoise(100, 100, 100);
 
-		ctx = canvas.getContext('2d');
-		setup();
-		createCircles();
-		animationFrame = window.requestAnimationFrame(draw);
+			ctx = canvas.getContext('2d');
+			setup();
+			createCircles();
+			animationFrame = window.requestAnimationFrame(draw);
+		}, 5000);
 
 		return () => window.cancelAnimationFrame(animationFrame);
 	});
