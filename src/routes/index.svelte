@@ -111,14 +111,14 @@
 	// }
 
 	// onMount(() => {
-	// 	setTimeout(() => {
-	// 		simplex = new SimplexNoise(100, 100, 100);
+	// 	simplex = new SimplexNoise(100, 100, 100);
 
-	// 		ctx = canvas.getContext('2d');
-	// 		setup();
-	// 		createCircles();
-	// 		animationFrame = window.requestAnimationFrame(draw);
-	// 	}, 5000);
+	// 	ctx = canvas.getContext('2d');
+	// 	setup();
+	// 	createCircles();
+	// 	animationFrame = window.requestAnimationFrame(draw);
+	// 	// setTimeout(() => {
+	// 	// }, 5000);
 
 	// 	return () => window.cancelAnimationFrame(animationFrame);
 	// });
@@ -128,10 +128,14 @@
 	<div bind:this={container} class="container">
 		<canvas bind:this={canvas} id="canvas" width="400" height="400" />
 	</div>
+	<div class="text-wrapper">
+		<h1>This is a test</h1>
+	</div>
 </section>
 
 <style>
 	section.hero {
+		position: relative;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -151,5 +155,23 @@
 
 	canvas {
 		display: block;
+	}
+
+	.text-wrapper {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		min-height: 100vh;
+	}
+
+	h1 {
+		font-size: 4rem;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+			'Open Sans', 'Helvetica Neue', sans-serif;
+		font-weight: 900;
 	}
 </style>
