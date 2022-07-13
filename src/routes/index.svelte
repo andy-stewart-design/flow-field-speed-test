@@ -12,6 +12,7 @@
 		ctx,
 		cR,
 		field,
+		observer,
 		rows,
 		scale,
 		simplex,
@@ -58,6 +59,23 @@
 		}
 	}
 
+	// clear the canvas at the beginning of each frame
+	function clear() {
+		ctx.fillStyle = fog;
+		ctx.fillRect(0, 0, wX, wY);
+	}
+
+	// calculate each frame of the animation
+	function calculateField() {
+		for (let x = 0; x < columns; x++) {
+			for (let y = 0; y < rows; y++) {
+				const noiseVal = simplex.noise3D(x / 50, y / 50, time);
+				field[x][y][0] = noiseVal * (PI * 2);
+				field[x][y][1] = noiseVal;
+			}
+		}
+	}
+
 	// run the animation
 	function drawField() {
 		for (let x = 0; x < columns; x++) {
@@ -73,27 +91,6 @@
 				ctx.lineTo(0, size * length);
 				ctx.stroke();
 				ctx.restore();
-			}
-		}
-	}
-
-	// clear the canvas at the beginning of each frame
-	function clear() {
-		ctx.fillStyle = fog;
-		ctx.fillRect(0, 0, wX, wY);
-	}
-
-	// calculate each frame of the animation
-	function calculateField() {
-		for (let x = 0; x < columns; x++) {
-			for (let y = 0; y < rows; y++) {
-				const angle = simplex.noise3D(x / 50, y / 50, time);
-				// console.log(x * size + y, angle);
-				// const length = simplex.noise3D(x / 100 + 40000, y / 100 + 40000, time);
-				// const length = 0.75;
-				// console.log(x * size + y, length);
-				field[x][y][0] = angle * (PI * 2);
-				field[x][y][1] = angle;
 			}
 		}
 	}
@@ -115,15 +112,20 @@
 
 	onMount(() => {
 		simplex = new SimplexNoise();
-
 		ctx = canvas.getContext('2d');
 		setup();
 		createCircles();
 		animationFrame = window.requestAnimationFrame(draw);
-		// setTimeout(() => {
-		// }, 5000);
 
-		return () => window.cancelAnimationFrame(animationFrame);
+		observer = new ResizeObserver(() => {
+			setup();
+		});
+		observer.observe(container);
+
+		return () => {
+			window.cancelAnimationFrame(animationFrame);
+			observer.disconnect();
+		};
 	});
 </script>
 
