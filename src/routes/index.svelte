@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import SimplexNoise from 'simplex-noise';
 	import { PI, cream, fog, green, colors, createGrid, Circle } from '$lib/utils/canvas';
-	import smplx from '$lib/data/smplx.json';
+
+	let smplx = [];
 
 	let animationFrame,
 		canvas,
@@ -39,8 +40,8 @@
 
 	function draw() {
 		animationFrame = window.requestAnimationFrame(draw);
-		calculateField();
 		clear();
+		calculateField();
 		drawField();
 		drawCircles();
 		time += inc;
@@ -86,11 +87,13 @@
 	function calculateField() {
 		for (let x = 0; x < columns; x++) {
 			for (let y = 0; y < rows; y++) {
-				const angle = simplex.noise3D(x / 50, y / 50, time) * (PI * 2);
-				console.log(angle);
-				const length = simplex.noise3D(x / 100 + 40000, y / 100 + 40000, time);
-				field[x][y][0] = angle;
-				field[x][y][1] = length;
+				const angle = simplex.noise3D(x / 50, y / 50, time);
+				// console.log(x * size + y, angle);
+				// const length = simplex.noise3D(x / 100 + 40000, y / 100 + 40000, time);
+				// const length = 0.75;
+				// console.log(x * size + y, length);
+				field[x][y][0] = angle * (PI * 2);
+				field[x][y][1] = angle;
 			}
 		}
 	}
@@ -111,7 +114,7 @@
 	}
 
 	onMount(() => {
-		simplex = new SimplexNoise(100, 100, 100);
+		simplex = new SimplexNoise();
 
 		ctx = canvas.getContext('2d');
 		setup();
