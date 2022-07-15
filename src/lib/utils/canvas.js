@@ -2,7 +2,7 @@ export const PI = Math.PI;
 export const TWOPI = Math.PI * 2;
 
 export const cream = '#F9F6EE';
-export const fog = '#EFEFEB';
+export const bg = '#EFEFEB';
 export const green = '#0ABB62';
 export const colors = [
 	['rgba(112, 184, 255, 0.35)', 'rgba(112, 184, 255, 0.0)'],

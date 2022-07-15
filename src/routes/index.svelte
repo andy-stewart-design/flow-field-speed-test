@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import SimplexNoise from 'simplex-noise';
-	import { PI, cream, fog, green, colors, createGrid, Circle } from '$lib/utils/canvas';
+	import { PI, bg, green, colors, createGrid, Circle } from '$lib/utils/canvas';
 
 	let smplx = [];
 
@@ -14,7 +14,6 @@
 		field,
 		observer,
 		rows,
-		scale,
 		simplex,
 		size,
 		wX,
@@ -24,15 +23,13 @@
 	let circles = [];
 
 	function setup() {
-		scale = 1;
 		wX = container.offsetWidth;
 		wY = container.offsetHeight;
 		size = wX < 600 ? 20 : 24;
 		canvas.style.width = wX + 'px';
 		canvas.style.height = wY + 'px';
-		canvas.width = wX * scale;
-		canvas.height = wY * scale;
-		ctx.scale(scale, scale);
+		canvas.width = wX;
+		canvas.height = wY;
 		columns = createGrid(wX, size);
 		rows = createGrid(wY, size);
 		initField();
@@ -61,7 +58,7 @@
 
 	// clear the canvas at the beginning of each frame
 	function clear() {
-		ctx.fillStyle = fog;
+		ctx.fillStyle = bg;
 		ctx.fillRect(0, 0, wX, wY);
 	}
 
